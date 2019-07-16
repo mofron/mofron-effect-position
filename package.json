@@ -1,0 +1,22 @@
+{
+  "name": "mofron-effect-position",
+  "version": "0.0.3",
+  "description": "position effect for mofron",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mofron/mofron-effect-position.git"
+  },
+  "keywords": [
+    "front-end"
+  ],
+  "author": "simparts",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mofron/mofron-effect-position/issues"
+  },
+  "homepage": "https://github.com/mofron/mofron-effect-position#readme"
+}
