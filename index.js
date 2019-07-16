@@ -21,7 +21,7 @@ mofron.effect.Position = class extends mofron.Effect {
         try {
             super();
             this.name('Position');
-            this.prmMap("dirType");
+            this.prmMap("types");
             this.prmOpt(po);
         } catch (e) {
             console.error(e.stack);
@@ -88,6 +88,27 @@ mofron.effect.Position = class extends mofron.Effect {
                 prm,
                 "left"
             );
+        } catch (e) {
+            console.error(e.stack);
+            throw e;
+        }
+    }
+    
+    /**
+     * set position, direction types
+     *
+     * @param (string) same as "posType"
+     * @param (string) same as "dirType"
+     * @return (array) types [posType, dirType]
+     * @type parameter
+     */
+    types (pos, dir) {
+        try {
+            if (undefined === pos) {
+                return [this.posType(), this.dirType()];
+            }
+            this.posType(pos);
+            this.dirType(dir);
         } catch (e) {
             console.error(e.stack);
             throw e;
