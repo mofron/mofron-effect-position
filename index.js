@@ -151,6 +151,11 @@ mofron.effect.Position = class extends mofron.Effect {
         try {
             if (undefined !== prm) {
                 mf.func.getSize(prm);
+                if (null !== this.component()) {
+                    let set_st = {};
+                    set_st[this.direction()] = prm;
+                    this.component().style(set_st);
+                }
             }
             return this.member("biginVal", "string", prm, "0rem");
         } catch (e) {
