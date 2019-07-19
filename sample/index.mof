@@ -1,0 +1,10 @@
+<require>
+    <tag module="mofron-comp-frame">Frame</tag>
+    <tag module="mofron-effect-position">Position</tag>
+</require>
+
+<Frame>
+    <effect>
+        <Position speed=1000>(left)(0rem,1rem)</Position>
+    </effect>
+</Frame>

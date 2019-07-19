@@ -2,6 +2,7 @@
  * @file mofron-effect-position/index.js
  * @brief position effect for mofron
  *        it makes easy to move the component position by the animation.
+ * @feature default animation speed is 300ms
  * @attention it may not work well if "posType" was configured incorrectly.
  *            "posType" is disabled if the target component was already set "position" style.
  * @author simpart
@@ -12,17 +13,38 @@ mofron.effect.Position = class extends mofron.Effect {
     /**
      * initialize effect
      *
-     * @param (string/object) string: position direction type
+     * @param (string/object) string: direction parameter
      *                        object: effect options
-     * @pmap type
+     * @param (string) value parameter
+     * @pmap dirction,value
      * @type private
      */
-    constructor (po) {
+    constructor (po,p2) {
         try {
             super();
             this.name('Position');
-            this.prmMap("types");
-            this.prmOpt(po);
+            this.prmMap(["dirction","value"]);
+            this.speed(300);
+            this.prmOpt(po,p2);
+        } catch (e) {
+            console.error(e.stack);
+            throw e;
+        }
+    }
+    
+    /**
+     * set begin position
+     *
+     * @type private
+     */
+    component (prm) {
+        try {
+            if (true === mf.func.isComp(prm)) {
+                let set_st = {};
+                set_st[this.direction()] = this.value()[0];
+                prm.style(set_st, {loose:true});
+            }
+            return super.component(prm);
         } catch (e) {
             console.error(e.stack);
             throw e;
@@ -31,8 +53,10 @@ mofron.effect.Position = class extends mofron.Effect {
     
     /**
      * effect contents
+     * set end position
      * 
      * @param (object) effect target component
+     * @type private
      */
     contents (cmp) {
         try {
@@ -41,7 +65,7 @@ mofron.effect.Position = class extends mofron.Effect {
                 { loose: true }
             );
             let tp = {};
-            tp[this.type()] = this.value();
+            tp[this.direction()] = this.value()[1];
             cmp.style(tp);
         } catch (e) {
             console.error(e.stack);
@@ -80,7 +104,7 @@ mofron.effect.Position = class extends mofron.Effect {
      * @return (string) direction type
      * @type parameter
      */
-    dirType (prm) {
+    direction (prm) {
         try {
             return this.member(
                 "type",
@@ -95,20 +119,21 @@ mofron.effect.Position = class extends mofron.Effect {
     }
     
     /**
-     * set position, direction types
-     *
-     * @param (string) same as "posType"
-     * @param (string) same as "dirType"
-     * @return (array) types [posType, dirType]
+     * position value
+     * component position is moved by this value size
+     * 
+     * @param (string) begin position value, default is "0rem"
+     * @param (string) end position value, default is "0rem"
+     * @return (string) position value
      * @type parameter
      */
-    types (pos, dir) {
+    value (bgn, end) {
         try {
-            if (undefined === pos) {
-                return [this.posType(), this.dirType()];
+            if (undefined === bgn) {
+                return [this.beginVal(), this.endVal()];
             }
-            this.posType(pos);
-            this.dirType(dir);
+            this.beginVal(bgn);
+            this.endVal(end);
         } catch (e) {
             console.error(e.stack);
             throw e;
@@ -116,19 +141,37 @@ mofron.effect.Position = class extends mofron.Effect {
     }
     
     /**
-     * position value
-     * component position is moved by this value size
-     * 
-     * @param (string) position value, default is "0rem"
-     * @return (string) position value
+     * begin position value
+     *
+     * @param (string) begin position value, default is "0rem"
+     * @return (string) begin position value
      * @type parameter
      */
-    value (prm) {
+    beginVal (prm) {
         try {
             if (undefined !== prm) {
                 mf.func.getSize(prm);
             }
-            return this.member("value", "string", prm, "0rem");
+            return this.member("biginVal", "string", prm, "0rem");
+        } catch (e) {
+            console.error(e.stack);
+            throw e;
+        }
+    }
+    
+    /**
+     * end position value
+     *
+     * @param (string) end position value, default is "0rem"
+     * @return (string) end position value
+     * @type parameter
+     */
+    endVal (prm) {
+        try {
+            if (undefined !== prm) {
+                mf.func.getSize(prm);
+            }
+            return this.member("endVal", "string", prm, "0rem");
         } catch (e) {
             console.error(e.stack);
             throw e;
