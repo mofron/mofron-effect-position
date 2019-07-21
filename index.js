@@ -26,25 +26,25 @@ mofron.effect.Position = class extends mofron.Effect {
             this.prmMap(["dirction","value"]);
             this.speed(300);
             this.prmOpt(po,p2);
-        } catch (e) {
-            console.error(e.stack);
-            throw e;
-        }
-    }
-    
-    /**
-     * set begin position
-     *
-     * @type private
-     */
-    component (prm) {
-        try {
-            if (true === mf.func.isComp(prm)) {
-                let set_st = {};
-                set_st[this.direction()] = this.value()[0];
-                prm.style(set_st, {loose:true});
-            }
-            return super.component(prm);
+            
+            this.beforeEvent(
+                (eff) => {
+                    try {
+                        /* set begin position */
+                        let set_st = {};
+                        set_st[eff.direction()] = eff.value()[0];
+                        eff.component().style(set_st);
+                        /* set position */
+                        eff.component().style(
+                            { "position" : eff.posiType() },
+                            { loose: true }
+                        );
+                    } catch (e) {
+                        console.error(e.stack);
+                        throw e;
+                    }
+                }
+            );
         } catch (e) {
             console.error(e.stack);
             throw e;
@@ -60,10 +60,6 @@ mofron.effect.Position = class extends mofron.Effect {
      */
     contents (cmp) {
         try {
-            cmp.style(
-                { "position" : this.posiType() },
-                { loose: true }
-            );
             let tp = {};
             tp[this.direction()] = this.value()[1];
             cmp.style(tp);
