@@ -25,6 +25,10 @@ mofron.effect.Position = class extends mofron.Effect {
             this.name('Position');
             this.prmMap(["dirction","value"]);
             this.speed(300);
+            /* default value */
+            this.beginVal("0rem");
+            this.endVal("0rem");
+            
             this.prmOpt(po,p2);
             
             this.beforeEvent(
@@ -140,20 +144,15 @@ mofron.effect.Position = class extends mofron.Effect {
      * begin position value
      *
      * @param (string) begin position value, default is "0rem"
-     * @return (string) begin position value
+     * @return (size) begin position value
      * @type parameter
      */
     beginVal (prm) {
         try {
-            if (undefined !== prm) {
-                mf.func.getSize(prm);
-                if (null !== this.component()) {
-                    let set_st = {};
-                    set_st[this.direction()] = prm;
-                    this.component().style(set_st);
-                }
+            let ret = this.member("biginVal", "size", prm);
+            if (undefined !== ret) {
+                return ret.toString();
             }
-            return this.member("biginVal", "string", prm, "0rem");
         } catch (e) {
             console.error(e.stack);
             throw e;
@@ -164,15 +163,15 @@ mofron.effect.Position = class extends mofron.Effect {
      * end position value
      *
      * @param (string) end position value, default is "0rem"
-     * @return (string) end position value
+     * @return (size) end position value
      * @type parameter
      */
     endVal (prm) {
         try {
-            if (undefined !== prm) {
-                mf.func.getSize(prm);
+            let ret = this.member("endVal", "string", prm);
+            if (undefined !== ret) {
+                return ret.toString();
             }
-            return this.member("endVal", "string", prm, "0rem");
         } catch (e) {
             console.error(e.stack);
             throw e;
