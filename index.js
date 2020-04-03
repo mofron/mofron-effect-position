@@ -3,52 +3,58 @@
  * @brief position effect for mofron
  *        it makes easy to move the component position by the animation.
  * @feature default animation speed is 300ms
- * @attention it may not work well if "posType" was configured incorrectly.
- *            "posType" is disabled if the target component was already set "position" style.
- * @author simpart
+ * @attention it may not work well if "position" was configured incorrectly.
+ *            "position" is disabled if the target component was already set "position" style.
+ * @license MIT
  */
-const mf = require("mofron");
 
-mofron.effect.Position = class extends mofron.Effect {
+module.exports = class extends mofron.class.Effect {
     /**
      * initialize effect
      *
      * @param (string/object) string: direction parameter
      *                        object: effect options
      * @param (string) value parameter
-     * @pmap dirction,value
+     * @short direction,value
      * @type private
      */
-    constructor (po,p2) {
+    constructor (prm) {
         try {
             super();
-            this.name('Position');
-            this.prmMap(["dirction","value"]);
+            this.name("Position");
+            this.shortForm("direction","value");
             this.speed(300);
-            /* default value */
-            this.beginVal("0rem");
-            this.endVal("0rem");
+            /* init config */
+            this.confmng().add(
+	        "position",
+                {
+		    type: "string",
+		    select: ["absolute", "fixed", "inherit", "initial", "relative", "static", "sticky", "unset"],
+		    init: "relative"
+		}
+            );
+	    this.confmng().add("direction", { type: "string", select: ["top", "left", "bottom", "right"], init: "left" });
+            this.confmng().add("value", { type: "size" });
             
-            this.prmOpt(po,p2);
-            
+            /* set before event */
             this.beforeEvent(
                 (eff) => {
                     try {
-                        /* set begin position */
-                        let set_st = {};
-                        set_st[eff.direction()] = eff.value()[0];
-                        eff.component().style(set_st);
-                        /* set position */
                         eff.component().style(
-                            { "position" : eff.posiType() },
-                            { loose: true }
-                        );
-                    } catch (e) {
+			    { "position" : eff.position() },
+			    { loose: true }
+			);
+		    } catch (e) {
                         console.error(e.stack);
                         throw e;
-                    }
-                }
-            );
+		    }
+		}
+	    );
+
+            /* set config */
+	    if (undefined !== prm) {
+                this.config(prm);
+            }
         } catch (e) {
             console.error(e.stack);
             throw e;
@@ -65,7 +71,7 @@ mofron.effect.Position = class extends mofron.Effect {
     contents (cmp) {
         try {
             let tp = {};
-            tp[this.direction()] = this.value()[1];
+            tp[this.direction()] = this.value();
             cmp.style(tp);
         } catch (e) {
             console.error(e.stack);
@@ -74,7 +80,7 @@ mofron.effect.Position = class extends mofron.Effect {
     }
     
     /**
-     * position type
+     * position type setter/getter
      * value of "position" style
      *
      * @param (string) position type, the default is "relative"
@@ -82,14 +88,9 @@ mofron.effect.Position = class extends mofron.Effect {
      * @return (string) position type
      * @type parameter
      */
-    posiType (prm) {
+    position (prm) {
         try {
-            return this.member(
-                "posiType",
-                ["absolute", "fixed", "inherit", "initial", "relative", "static", "sticky", "unset"],
-                prm,
-                "relative"
-            );
+	    return this.confmng("position", prm);
         } catch (e) {
             console.error(e.stack);
             throw e;
@@ -106,12 +107,7 @@ mofron.effect.Position = class extends mofron.Effect {
      */
     direction (prm) {
         try {
-            return this.member(
-                "type",
-                ["top", "left", "bottom", "right"],
-                prm,
-                "left"
-            );
+            return this.confmng("direction", prm);
         } catch (e) {
             console.error(e.stack);
             throw e;
@@ -122,61 +118,17 @@ mofron.effect.Position = class extends mofron.Effect {
      * position value
      * component position is moved by this value size
      * 
-     * @param (string) begin position value, default is "0rem"
-     * @param (string) end position value, default is "0rem"
+     * @param (string) position value, [default is "0rem"]
      * @return (string) position value
      * @type parameter
      */
-    value (bgn, end) {
+    value (prm) {
         try {
-            if (undefined === bgn) {
-                return [this.beginVal(), this.endVal()];
-            }
-            this.beginVal(bgn);
-            this.endVal(end);
-        } catch (e) {
-            console.error(e.stack);
-            throw e;
-        }
-    }
-    
-    /**
-     * begin position value
-     *
-     * @param (string) begin position value, default is "0rem"
-     * @return (size) begin position value
-     * @type parameter
-     */
-    beginVal (prm) {
-        try {
-            let ret = this.member("biginVal", "size", prm);
-            if (undefined !== ret) {
-                return ret.toString();
-            }
-        } catch (e) {
-            console.error(e.stack);
-            throw e;
-        }
-    }
-    
-    /**
-     * end position value
-     *
-     * @param (string) end position value, default is "0rem"
-     * @return (size) end position value
-     * @type parameter
-     */
-    endVal (prm) {
-        try {
-            let ret = this.member("endVal", "string", prm);
-            if (undefined !== ret) {
-                return ret.toString();
-            }
+	    return this.confmng("value", prm);
         } catch (e) {
             console.error(e.stack);
             throw e;
         }
     }
 }
-module.exports = mofron.effect.Position;
 /* end of file */
