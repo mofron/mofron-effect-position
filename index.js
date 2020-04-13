@@ -12,17 +12,17 @@ module.exports = class extends mofron.class.Effect {
     /**
      * initialize effect
      *
-     * @param (string/object) string: direction parameter
-     *                        object: effect options
-     * @param (string) value parameter
-     * @short direction,value
+     * @param (mixed) string: directionconfig  parameter
+     *                        dict: effect config list
+     * @param (string(size)) value parameter
+     * @short dirction,value
      * @type private
      */
     constructor (prm) {
         try {
             super();
             this.name("Position");
-            this.shortForm("direction","value");
+            this.shortForm("direction", "value");
             this.speed(300);
             /* init config */
             this.confmng().add(
@@ -36,13 +36,13 @@ module.exports = class extends mofron.class.Effect {
 	    this.confmng().add("direction", { type: "string", select: ["top", "left", "bottom", "right"], init: "left" });
             this.confmng().add("value", { type: "size" });
             
-            /* set before event */
+
             this.beforeEvent(
                 (eff) => {
                     try {
                         eff.component().style(
 			    { "position" : eff.position() },
-			    { loose: true }
+			    { passive: true }
 			);
 		    } catch (e) {
                         console.error(e.stack);
@@ -51,10 +51,12 @@ module.exports = class extends mofron.class.Effect {
 		}
 	    );
 
+
             /* set config */
 	    if (undefined !== prm) {
                 this.config(prm);
             }
+            
         } catch (e) {
             console.error(e.stack);
             throw e;
@@ -118,7 +120,8 @@ module.exports = class extends mofron.class.Effect {
      * position value
      * component position is moved by this value size
      * 
-     * @param (string) position value, [default is "0rem"]
+     * @param (string) begin position value, default is "0rem"
+     * @param (string) end position value, default is "0rem"
      * @return (string) position value
      * @type parameter
      */
