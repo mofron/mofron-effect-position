@@ -1,62 +1,34 @@
 /**
  * @file mofron-effect-position/index.js
- * @brief position effect for mofron
- *        it makes easy to move the component position by the animation.
- * @feature default animation speed is 300ms
- * @attention it may not work well if "position" was configured incorrectly.
- *            "position" is disabled if the target component was already set "position" style.
+ * @brief center positon effect module
+ *        position setter module for horizontal and vertical
  * @license MIT
  */
+const HrzPos = require("mofron-effect-hrzpos");
+const VrtPos = require("mofron-effect-vrtpos");
 
 module.exports = class extends mofron.class.Effect {
     /**
      * initialize effect
-     *
-     * @param (mixed) string: directionconfig  parameter
-     *                        dict: effect config list
-     * @param (string(size)) value parameter
-     * @short dirction,value
+     * 
+     * @param (mixed) horiz parameter
+     *                dict: effect config
+     * @param (string) vrtic parameter 
+     * @short horiz,vrtic
      * @type private
      */
-    constructor (prm) {
+    constructor (p1, p2) {
         try {
             super();
             this.name("Position");
-            this.shortForm("direction", "value");
-            this.speed(300);
+	    this.shortForm("horiz", "vrtic");
             /* init config */
-            this.confmng().add(
-	        "position",
-                {
-		    type: "string",
-		    select: ["absolute", "fixed", "inherit", "initial", "relative", "static", "sticky", "unset"],
-		    init: "relative"
-		}
-            );
-	    this.confmng().add("direction", { type: "string", select: ["top", "left", "bottom", "right"], init: "left" });
-            this.confmng().add("value", { type: "size" });
-            
-
-            this.beforeEvent(
-                (eff) => {
-                    try {
-                        eff.component().style(
-			    { "position" : eff.position() },
-			    { passive: true }
-			);
-		    } catch (e) {
-                        console.error(e.stack);
-                        throw e;
-		    }
-		}
-	    );
-
-
+	    this.confmng().add("horiz", { type: "string", init: "center" });
+            this.confmng().add("vrtic", { type: "string", init: "center" } );
             /* set config */
-	    if (undefined !== prm) {
-                this.config(prm);
-            }
-            
+	    if (0 < arguments.length) {
+                this.config(p1,p2);
+	    }
         } catch (e) {
             console.error(e.stack);
             throw e;
@@ -64,70 +36,53 @@ module.exports = class extends mofron.class.Effect {
     }
     
     /**
-     * effect contents
-     * set end position
+     * component setter/getter
      * 
-     * @param (object) effect target component
+     * @param (component) effect target
+     * @return (component) effect target
      * @type private
      */
-    contents (cmp) {
+    component (prm) {
         try {
-            let tp = {};
-            tp[this.direction()] = this.value();
-            cmp.style(tp);
-        } catch (e) {
+	    if (undefined !== prm) {
+                prm.effect([
+		    new HrzPos(this.horiz()),
+		    new VrtPos(this.vrtic())
+		]);
+	    }
+            return super.component(prm);
+	} catch (e) {
             console.error(e.stack);
             throw e;
-        }
+	}
     }
     
     /**
-     * position type setter/getter
-     * value of "position" style
-     *
-     * @param (string) position type, the default is "relative"
-     *                 ["absolute"/"fixed"/"inherit"/"initial"/"relative"/"static"/"sticky"/"unset"]
-     * @return (string) position type
-     * @type parameter
-     */
-    position (prm) {
-        try {
-	    return this.confmng("position", prm);
-        } catch (e) {
-            console.error(e.stack);
-            throw e;
-        }
-    }
-    
-    /**
-     * direction type
-     *
-     * @param (string) direction type, the default is "left"
-     *                 ["top"/"left"/"bottom"/"right"]
-     * @return (string) direction type
-     * @type parameter
-     */
-    direction (prm) {
-        try {
-            return this.confmng("direction", prm);
-        } catch (e) {
-            console.error(e.stack);
-            throw e;
-        }
-    }
-    
-    /**
-     * position value
-     * component position is moved by this value size
+     * horizontal position setter/getter
      * 
-     * @param (string) begin position value, default is "0rem"
-     * @param (string) end position value, default is "0rem"
-     * @return (string) position value
+     * @param (string) horizontal position [left,center,right]
+     * @return (string) horizontal position
      * @type parameter
      */
-    value (prm) {
+    horiz (prm) {
         try {
-	    return this.confmng("value", prm);
+            return this.confmng("horiz", prm);
+	} catch (e) {
+            console.error(e.stack);
+            throw e;
+	}
+    }
+    
+    /**
+     * vertical position setter/getter
+     *
+     * @param (string) vertical position [top,center,bottom]
+     * @return (string) vertical position
+     * @type parameter
+     */
+    vrtic (prm) {
+        try {
+            return this.confmng("vrtic", prm);
         } catch (e) {
             console.error(e.stack);
             throw e;

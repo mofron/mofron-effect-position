@@ -1,7 +1,0 @@
-<require>
-    <tag module="mofron-comp-frame">Frame</tag>
-    <tag module="mofron-effect-position">Position</tag>
-</require>
-
-<Frame style="left:0rem;" effect=Position:(left,1rem)>
-</Frame>
