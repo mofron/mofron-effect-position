@@ -23,8 +23,10 @@ module.exports = class extends mofron.class.Effect {
             this.name("Position");
 	    this.shortForm("horiz", "vrtic");
             /* init config */
-	    this.confmng().add("horiz", { type: "string", init: "center" });
-            this.confmng().add("vrtic", { type: "string", init: "center" } );
+	    this.confmng().add("horiz",   { type: "string", init: "center" });
+	    this.confmng().add("hOffset", { type: "size" });
+            this.confmng().add("vrtic",   { type: "string", init: "center" } );
+	    this.confmng().add("vOffset", { type: "size" });
             /* set config */
 	    if (0 < arguments.length) {
                 this.config(p1,p2);
@@ -46,8 +48,8 @@ module.exports = class extends mofron.class.Effect {
         try {
 	    if (undefined !== prm) {
                 prm.effect([
-		    new HrzPos(this.horiz()),
-		    new VrtPos(this.vrtic())
+		    new HrzPos(this.horiz(), this.confmng("hOffset")),
+		    new VrtPos(this.vrtic(), this.confmng("vOffset"))
 		]);
 	    }
             return super.component(prm);
@@ -64,8 +66,9 @@ module.exports = class extends mofron.class.Effect {
      * @return (string) horizontal position
      * @type parameter
      */
-    horiz (prm) {
+    horiz (prm, off) {
         try {
+	    this.confmng("hOffset", off);
             return this.confmng("horiz", prm);
 	} catch (e) {
             console.error(e.stack);
@@ -80,8 +83,9 @@ module.exports = class extends mofron.class.Effect {
      * @return (string) vertical position
      * @type parameter
      */
-    vrtic (prm) {
+    vrtic (prm, off) {
         try {
+	    this.confmng("vOffset", off);
             return this.confmng("vrtic", prm);
         } catch (e) {
             console.error(e.stack);
