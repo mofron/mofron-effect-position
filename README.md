@@ -28,5 +28,9 @@ npm install mofron mofron-effect-position
 | Short<br>Form | Parameter Name | Type | Description |
 |:-------------:|:---------------|:-----|:------------|
 | ◯  | horiz | string | horizontal position [left,center,right] |
+| | | string(size) | horizontal offset size |
+| | hOffset | string(size) | horizontal offset size |
 | ◯  | vrtic | string | vertical position [top,center,bottom] |
+| | | string(size) | vertical offset size |
+| | vOffset | string(size) | vertical offset size |
 

@@ -1,6 +1,6 @@
 {
   "name": "mofron-effect-position",
-  "version": "0.2.2",
+  "version": "0.2.4",
   "description": "position setter module for horizontal and vertical",
   "main": "index.js",
   "scripts": {
