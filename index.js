@@ -48,8 +48,8 @@ module.exports = class extends mofron.class.Effect {
         try {
 	    if (undefined !== prm) {
                 prm.effect([
-		    new HrzPos(this.horiz(), this.hOffset()),
-		    new VrtPos(this.vrtic(), this.vOffset())
+		    new HrzPos(this.horiz(), this.confmng("hOffset")),
+		    new VrtPos(this.vrtic(), this.confmng("vOffset"))
 		]);
 	    }
             return super.component(prm);
@@ -63,7 +63,6 @@ module.exports = class extends mofron.class.Effect {
      * horizontal position setter/getter
      * 
      * @param (string) horizontal position [left,center,right]
-     * @param (string(size)) horizontal offset size
      * @return (string) horizontal position
      * @type parameter
      */
@@ -78,26 +77,9 @@ module.exports = class extends mofron.class.Effect {
     }
     
     /**
-     * horizontal offset size setter/getter
-     * 
-     * @param (string(size)) horizontal offset size
-     * @return (string(size)) horizontal offset size
-     * @type parameter
-     */
-    hOffset (prm) {
-        try {
-            return this.confmng("hOffset", prm);
-	} catch (e) {
-            console.error(e.stack);
-            throw e;
-	}
-    }
-    
-    /**
      * vertical position setter/getter
      *
      * @param (string) vertical position [top,center,bottom]
-     * @param (string(size)) vertical offset size
      * @return (string) vertical position
      * @type parameter
      */
@@ -106,22 +88,6 @@ module.exports = class extends mofron.class.Effect {
 	    this.confmng("vOffset", off);
             return this.confmng("vrtic", prm);
         } catch (e) {
-            console.error(e.stack);
-            throw e;
-        }
-    }
-
-    /**
-     * vertical position setter/getter
-     * 
-     * @param (string(size)) vertical offset size
-     * @return (string(size)) vertical offset size
-     * @type parameter
-     */
-    vOffset (prm) {
-        try {
-            return this.confmng("vOffset", prm);
-	} catch (e) {
             console.error(e.stack);
             throw e;
         }
